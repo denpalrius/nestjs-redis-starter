@@ -2,6 +2,7 @@ import {
   Injectable,
   UnprocessableEntityException,
   NotFoundException,
+  Logger,
 } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import { Redis } from 'ioredis';
@@ -36,10 +37,16 @@ export class AppService {
   }
 
   async getValue(key: string): Promise<any> {
-    const value = await this.client.get(key);
+    let value = await this.client.get(key);
 
     if (!key || !value) {
       throw new UnprocessableEntityException('Invalid key or null value');
+    }
+
+    try {
+      value = JSON.parse(value);
+    } catch (error) {
+      Logger.error('value was probably a string');
     }
 
     return { success: true, data: value };
