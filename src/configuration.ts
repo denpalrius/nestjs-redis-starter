@@ -9,13 +9,13 @@ export default () => ({
     db: parseInt(process.env.REDIS_PREFIX, 10) || 0,
     // keyPrefix: parseInt(process.env.REDIS_PREFIX, 10) || 0,
 
-    onClientReady: async (client: Redis) => {
-      Logger.log('[Redis configuration] Redis initialized successfully');  
+    onClientReady: async (client: Redis | any) => {
+      Logger.log('[Redis configuration] Redis initialized successfully');
 
       await client.setex(
-        `connection status:${new Date().toTimeString()}`,
+        `connection_status`,
         240,
-        'ready',
+        `ready at ${new Date().toTimeString()}`,
       );
 
       client.on('error', (err) => {

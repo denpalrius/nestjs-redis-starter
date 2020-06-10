@@ -1,0 +1,43 @@
+# Secrets
+# *.env
+
+# Source files
+src
+
+# Test files
+test
+coverage
+
+# Docker files
+Dockerfile*
+.dockerignore
+docker-compose*
+
+# Git files
+.git
+.github
+
+# VS Code configurations
+.vscode
+
+# Build and Debug files
+build-configs
+deploy-configs
+azure-pipelines.yml
+tsconfig.json
+tsconfig.spec.json
+
+# Linting files
+tslint.json
+.prettierrc
+
+# Documentation
+README.md
+documentation
+
+# Node Files
+node_modules
+npm-debug.log
+npm-debug.log.*
+combined.log
+exceptions.log

@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Param, Query, Post } from '@nestjs/common';
+import { Controller, Get, Body, Query, Post, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
 import { data } from './interfaces/data';
 
@@ -7,8 +7,15 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  root(): string {
-    return 'This is a nest js redis starter';
+  root() {
+    return { status: 'OK', message: 'This is a nest js redis starter' };
+  }
+
+  @Get('redis_client')
+  getRedisClient() {
+    const redisClient = this.appService.getRedisClient() as any;
+    const { options, status } = redisClient;
+    return { options, status };
   }
 
   @Post('set')

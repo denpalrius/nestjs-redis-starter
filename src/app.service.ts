@@ -12,7 +12,11 @@ export class AppService {
   client: Redis;
 
   constructor(private readonly redisService: RedisService) {
-    this.client = this.redisService.getClient();
+    this.client = this.getRedisClient();
+  }
+
+  getRedisClient(): Redis {
+    return this.redisService.getClient();
   }
 
   async setValue(data: data): Promise<{ status: string; data: data }> {
@@ -20,7 +24,10 @@ export class AppService {
       throw new UnprocessableEntityException('Invalid data values');
     }
 
-    const status = await this.client.setex(data.key, data.seconds, data.value);
+    const value =
+      typeof data.value === 'string' ? data.value : JSON.stringify(data.value);
+
+    const status = await this.client.setex(data.key, data.seconds, value);
 
     return {
       status,
@@ -29,11 +36,12 @@ export class AppService {
   }
 
   async getValue(key: string): Promise<any> {
-    if (!key) {
-      throw new UnprocessableEntityException('Invalid key');
-    }
     const value = await this.client.get(key);
 
-    return value || new NotFoundException('Nothing is set for that key');
+    if (!key || !value) {
+      throw new UnprocessableEntityException('Invalid key or null value');
+    }
+
+    return { success: true, data: value };
   }
 }

@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  nestjs-redis:
+    image: nestjs-redis
+    container_name: docker-redis
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: 'node'
+    working_dir: /usr/src/app
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+      - 9229:9229
+    tty: true
+    command: 'node dist/main.js'
